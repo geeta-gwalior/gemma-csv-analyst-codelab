@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build a CSV Analyst with Google ADK and Gemma (Local, Free)</title>
+  <meta name="description" content="Hands-on codelab: Build a local, free multi-agent CSV analyst using Google ADK, Gemma 4, and Ollama.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <span class="brand-badge">
+        <span class="brand-dot"></span>
+        Codelab
+      </span>
+      <h1 class="topbar-title">Build a CSV Analyst with Google ADK and Gemma (Local, Free)</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="time-pill" id="timeRemaining">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5l3 2" stroke-linecap="round"/>
+        </svg>
+        <span id="timeText">30 min left</span>
+      </div>
+      <button class="icon-btn" id="viewModeBtn" type="button">All steps</button>
+      <button class="icon-btn" id="themeBtn" type="button">Dark</button>
+    </div>
+  </header>
+
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <ol class="step-list" id="stepList">
+        <li>
+          <button class="step-nav-btn active" data-step="0" type="button">
+            <span class="step-num">1</span>
+            <span class="step-label">Overview</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="1" type="button">
+            <span class="step-num">2</span>
+            <span class="step-label">What is Gemma &amp; Basics</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="2" type="button">
+            <span class="step-num">3</span>
+            <span class="step-label">Install the requirements</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="3" type="button">
+            <span class="step-num">4</span>
+            <span class="step-label">Create the project folder</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="4" type="button">
+            <span class="step-num">5</span>
+            <span class="step-label">Write the tool</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="5" type="button">
+            <span class="step-num">6</span>
+            <span class="step-label">Create the first agent</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="6" type="button">
+            <span class="step-num">7</span>
+            <span class="step-label">Test one agent quickly</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="7" type="button">
+            <span class="step-num">8</span>
+            <span class="step-label">Chart tool &amp; report agent</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="8" type="button">
+            <span class="step-num">9</span>
+            <span class="step-label">Create the manager agent</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="9" type="button">
+            <span class="step-num">10</span>
+            <span class="step-label">Run and test the system</span>
+          </button>
+        </li>
+        <li>
+          <button class="step-nav-btn" data-step="10" type="button">
+            <span class="step-num">11</span>
+            <span class="step-label">Troubleshooting &amp; Practice</span>
+          </button>
+        </li>
+      </ol>
+
+      <div class="sidebar-footer">
+        <p><strong>Geeta Kakrani</strong></p>
+        <p>Google Developer Expert (AI/ML)</p>
+      </div>
+    </aside>
+
+    <main class="content-area">
+      <div class="content-inner">
+
+        <section class="step-card active" data-step="0" data-duration="3">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 1 of 11</div>
+            <h2 class="step-title">Overview</h2>
+            <div class="meta-strip">
+              <span class="meta-chip"><strong>Time:</strong> about 30 minutes</span>
+              <span class="meta-chip"><strong>Level:</strong> Beginner</span>
+              <span class="meta-chip"><strong>Cost:</strong> Local &amp; Free</span>
+            </div>
+          </div>
+
+          <p>In this codelab you will build a small team of AI agents that read a CSV file and answer questions about it. Everything runs on your own laptop. No cloud, no API key, no cost.</p>
+
+          <h3>What you will build</h3>
+
+          <div class="arch-diagram" aria-label="Agent architecture diagram">
+            <div class="arch-node">
+              <div class="arch-node-title">You ask a question</div>
+            </div>
+            <div class="arch-arrow">&#8595;</div>
+            <div class="arch-node manager">
+              <div class="arch-node-title">csv_orchestrator</div>
+              <div class="arch-node-sub">The manager</div>
+            </div>
+            <div class="arch-arrow">&#8601; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#8600;</div>
+            <div class="arch-row">
+              <div class="arch-node specialist">
+                <div class="arch-node-title">csv_analyst</div>
+                <div class="arch-node-sub">Numbers</div>
+              </div>
+              <div class="arch-node specialist">
+                <div class="arch-node-title">csv_report_agent</div>
+                <div class="arch-node-sub">Summary + charts</div>
+              </div>
+            </div>
+            <div class="arch-arrow">&#8595;</div>
+            <div class="arch-node">
+              <div class="arch-node-title">read_csv tool &#8594; st.csv</div>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>Architecture Flow</span>
+            </div>
+            <pre><code>You ask a question
+        |
+        v
+csv_orchestrator  (the manager)
+   |            |
+   v            v
+csv_analyst   csv_report_agent
+(numbers)     (summary + charts)
+   |            |
+   +-- read_csv tool --&gt; st.csv</code></pre>
+          </div>
+
+          <h3>What you will learn</h3>
+          <ul>
+            <li>What an <strong>agent</strong>, a <strong>tool</strong> and a <strong>sub-agent</strong> are</li>
+            <li>How to run <strong>Gemma</strong> locally with <strong>Ollama</strong></li>
+            <li>How to connect Gemma to <strong>Google ADK</strong> using <code>LiteLlm</code></li>
+            <li>How one manager agent can send work to specialist agents</li>
+          </ul>
+        </section>
+
+        <section class="step-card" data-step="1" data-duration="4">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 2 of 11</div>
+            <h2 class="step-title">What is Gemma &amp; Basics</h2>
+          </div>
+
+          <p><strong>Gemma</strong> is a family of open AI models from Google DeepMind. It is built using the same research as Google's Gemini models, but you can download Gemma and run it yourself.</p>
+          <p>Gemma comes in different sizes. Small ones (like <code>gemma4:e4b</code> used here) run on a normal laptop. Bigger ones need a stronger GPU or the cloud.</p>
+
+          <h3>Why is Gemma useful?</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Benefit</th>
+                  <th>What it means for you</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Free to run</strong></td>
+                  <td>No API bill. Download once and use it.</td>
+                </tr>
+                <tr>
+                  <td><strong>Private</strong></td>
+                  <td>Your data stays on your machine. Good for company or student data.</td>
+                </tr>
+                <tr>
+                  <td><strong>Works offline</strong></td>
+                  <td>No internet needed after the download.</td>
+                </tr>
+                <tr>
+                  <td><strong>Tool calling</strong></td>
+                  <td>Gemma can call your Python functions, which is what agents need.</td>
+                </tr>
+                <tr>
+                  <td><strong>Flexible</strong></td>
+                  <td>Run it locally with Ollama, or deploy it on Google Cloud when you need scale.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Gemma or Gemini?</h3>
+          <ul>
+            <li><strong>Gemini</strong>: Google's most powerful models, used through an API in the cloud.</li>
+            <li><strong>Gemma</strong>: smaller open models that you can run and control yourself.</li>
+          </ul>
+          <p>In this codelab we use Gemma because it is free, private and easy to run in a workshop.</p>
+
+          <div class="callout note">
+            <p><strong>Note:</strong> a small local model is less powerful than a big cloud model. That is why we keep instructions short and clear, and use <code>temperature=0</code>.</p>
+          </div>
+
+          <h3>Basics in 1 minute</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Word</th>
+                  <th>Simple meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>LLM</strong></td>
+                  <td>The "brain" that understands and writes text. Here it is Gemma.</td>
+                </tr>
+                <tr>
+                  <td><strong>Agent</strong></td>
+                  <td>An LLM with a job (instructions) and, optionally, tools.</td>
+                </tr>
+                <tr>
+                  <td><strong>Tool</strong></td>
+                  <td>A normal Python function the agent can call. Example: read a file.</td>
+                </tr>
+                <tr>
+                  <td><strong>Sub-agent</strong></td>
+                  <td>A specialist agent that a manager agent can hand work to.</td>
+                </tr>
+                <tr>
+                  <td><strong>ADK</strong></td>
+                  <td>Agent Development Kit. Google's Python framework to build agents.</td>
+                </tr>
+                <tr>
+                  <td><strong>Ollama</strong></td>
+                  <td>A free app that runs open models like Gemma on your computer.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="step-card" data-step="2" data-duration="5">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 3 of 11</div>
+            <h2 class="step-title">Step 1: Install the requirements</h2>
+          </div>
+
+          <p>You need Python 3.10 or higher.</p>
+
+          <h3>1. Install Ollama</h3>
+          <p>Download and install Ollama from <a href="https://ollama.com" target="_blank" rel="noopener noreferrer">https://ollama.com</a>.</p>
+
+          <h3>2. Download the Gemma model</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <span>bash</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>ollama pull gemma4:e4b</code></pre>
+          </div>
+
+          <h3>3. Install the Python packages</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <span>bash</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>pip install "google-adk[extensions]" pandas matplotlib</code></pre>
+          </div>
+
+          <div class="callout">
+            <p><code>[extensions]</code> is needed because ADK talks to Ollama through LiteLLM.</p>
+          </div>
+        </section>
+
+        <section class="step-card" data-step="3" data-duration="3">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 4 of 11</div>
+            <h2 class="step-title">Step 2: Create the project folder</h2>
+          </div>
+
+          <p>Create this folder structure on your computer:</p>
+
+          <div class="folder-tree">
+            my_project/<br>
+            &nbsp;&nbsp;csv_agent/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;__init__.py<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;agent.py<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;st.csv<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;.env
+          </div>
+
+          <h3><code>__init__.py</code></h3>
+          <p>One line, so ADK can find your agent:</p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/__init__.py</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>from . import agent</code></pre>
+          </div>
+
+          <h3><code>.env</code></h3>
+          <p>Tells ADK where Ollama is running:</p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/.env</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>OLLAMA_API_BASE=http://localhost:11434</code></pre>
+          </div>
+
+          <h3><code>st.csv</code></h3>
+          <p>Sample data (you can also use your own):</p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/st.csv</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>name,age,city,salary
+Asha,21,Gwalior,30000
+Ravi,24,Indore,45000
+Meera,22,Bhopal,38000
+Kabir,26,Delhi,60000
+Sana,23,Pune,42000</code></pre>
+          </div>
+        </section>
+
+        <section class="step-card" data-step="4" data-duration="3">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 5 of 11</div>
+            <h2 class="step-title">Step 3: Write the tool</h2>
+          </div>
+
+          <p>A tool is just a Python function. The <strong>docstring is important</strong>: the model reads it to know what the tool does.</p>
+          <p>Open <code>agent.py</code> and start with this:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/agent.py</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>from google.adk.agents import Agent
+from google.adk.models.lite_llm import LiteLlm
+
+import pandas as pd
+import os
+
+
+def read_csv() -&gt; str:
+    """Read the st.csv file from the same folder as agent.py."""
+    file_path = os.path.join(os.path.dirname(__file__), "st.csv")
+    try:
+        df = pd.read_csv(file_path)
+        return df.to_string(index=False)
+    except Exception as e:
+        return f"Error reading CSV: {str(e)}"</code></pre>
+          </div>
+
+          <div class="callout tip">
+            <p><strong>Why:</strong> the model cannot open files by itself. The tool gives it the data.</p>
+          </div>
+        </section>
+
+        <section class="step-card" data-step="5" data-duration="3">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 6 of 11</div>
+            <h2 class="step-title">Step 4: Create the first agent (the analyst)</h2>
+          </div>
+
+          <p>Add the first specialist agent to <code>agent.py</code>:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/agent.py</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>csv_analyst = Agent(
+    name="csv_analyst",
+    model=LiteLlm(model="ollama_chat/gemma4:e4b", temperature=0),
+    description="Specialist agent for analyzing CSV data.",
+    instruction="""
+    You are a CSV Data Analyst.
+    ALWAYS use the read_csv tool before answering any question about the CSV.
+    Answer questions like averages, maximum, minimum, counts and comparisons.
+    Use only the information returned by the read_csv tool.
+    Do not invent information.
+    """,
+    tools=[read_csv],
+)</code></pre>
+          </div>
+
+          <h3>Two things to notice</h3>
+          <ul>
+            <li><strong><code>ollama_chat/...</code></strong> : always use <code>ollama_chat</code>, not <code>ollama</code>. The plain <code>ollama</code> prefix can cause tool-call loops.</li>
+            <li><strong><code>temperature=0</code></strong> : makes answers steady and less random, which is good for numbers.</li>
+          </ul>
+        </section>
+
+        <section class="step-card" data-step="6" data-duration="2">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 7 of 11</div>
+            <h2 class="step-title">Step 5: Test one agent quickly (optional)</h2>
+          </div>
+
+          <p>Testing one agent first is optional, but recommended so you know your local setup works.</p>
+          <p>Temporarily add this line at the bottom of <code>agent.py</code>:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/agent.py</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>root_agent = csv_analyst</code></pre>
+          </div>
+
+          <p>Run from <code>my_project/</code>:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>bash</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>adk web</code></pre>
+          </div>
+
+          <p>Open <a href="http://localhost:8000" target="_blank" rel="noopener noreferrer">http://localhost:8000</a>, pick <code>csv_agent</code>, and ask:</p>
+
+          <div class="callout">
+            <p>What is the average age?</p>
+          </div>
+
+          <p>If you get the right answer, your setup works. <strong>Remove the temporary line</strong> before moving to the next step.</p>
+        </section>
+
+        <section class="step-card" data-step="7" data-duration="4">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 8 of 11</div>
+            <h2 class="step-title">Step 6: Add the chart tool and the report agent</h2>
+          </div>
+
+          <p>First, add the chart tool. Put this near <code>read_csv</code> in <code>agent.py</code>:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/agent.py</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+
+def create_chart(column: str, chart_type: str = "bar") -&gt; str:
+    """Create a chart for one CSV column and save it as a PNG file.
+    chart_type can be 'bar', 'hist' or 'line'."""
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), "st.csv"))
+    if column not in df.columns:
+        return f"Column not found. Available columns: {list(df.columns)}"
+    out = os.path.join(os.path.dirname(__file__), f"{column}_{chart_type}.png")
+    fig, ax = plt.subplots()
+    if chart_type == "hist":
+        df[column].plot.hist(ax=ax)
+    elif chart_type == "line":
+        df[column].plot.line(ax=ax)
+    else:
+        df[column].value_counts().plot.bar(ax=ax)
+    ax.set_title(f"{column} ({chart_type})")
+    fig.savefig(out)
+    plt.close(fig)
+    return f"Chart saved at {out}"</code></pre>
+          </div>
+
+          <p>Now add the report agent:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/agent.py</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>csv_report_agent = Agent(
+    name="csv_report_agent",
+    model=LiteLlm(model="ollama_chat/gemma4:e4b", temperature=0),
+    description="Specialist agent for creating summaries and reports from CSV data.",
+    instruction="""
+    You are a CSV Report Specialist.
+    ALWAYS use the read_csv tool first.
+    Then:
+    1. Understand the columns.
+    2. Find useful statistics.
+    3. Write a short summary with key findings.
+    4. Use the create_chart tool to make one chart for an important column.
+    Use only information from the CSV. Do not invent information.
+    """,
+    tools=[read_csv, create_chart],
+)</code></pre>
+          </div>
+
+          <div class="callout tip">
+            <p><strong>Why two agents?</strong> Small, focused agents are more reliable than one agent that does everything.</p>
+          </div>
+        </section>
+
+        <section class="step-card" data-step="8" data-duration="3">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 9 of 11</div>
+            <h2 class="step-title">Step 7: Create the manager (root agent)</h2>
+          </div>
+
+          <p>ADK looks for a variable named <strong><code>root_agent</code></strong>. This is the entry point.</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>csv_agent/agent.py</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>root_agent = Agent(
+    name="csv_orchestrator",
+    model=LiteLlm(model="ollama_chat/gemma4:e4b", temperature=0),
+    description="Main manager for CSV questions. Delegates to specialists.",
+    instruction="""
+    You are the CSV Orchestrator. You have two specialists:
+
+    1. csv_analyst: calculations, averages, max/min, counts, comparisons.
+    2. csv_report_agent: summaries, reports, key findings, charts.
+
+    Do NOT analyze the CSV yourself. Send the request to the right specialist.
+
+    Examples:
+    "What is the average age?"        -&gt; csv_analyst
+    "Who has the highest salary?"     -&gt; csv_analyst
+    "Give me a summary of the CSV."   -&gt; csv_report_agent
+    "Create a report with a chart."   -&gt; csv_report_agent
+    """,
+    sub_agents=[csv_analyst, csv_report_agent],
+)</code></pre>
+          </div>
+
+          <p><strong>How it works:</strong> the manager reads your question and transfers it to the best sub-agent. That sub-agent answers you directly.</p>
+
+          <details class="details-box">
+            <summary>View complete agent.py file</summary>
+            <div class="details-body">
+              <div class="code-block">
+                <div class="code-header">
+                  <span>csv_agent/agent.py (complete)</span>
+                  <button class="copy-btn" type="button">Copy</button>
+                </div>
+                <pre><code>from google.adk.agents import Agent
+from google.adk.models.lite_llm import LiteLlm
+
+import pandas as pd
+import os
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+
+def read_csv() -&gt; str:
+    """Read the st.csv file from the same folder as agent.py."""
+    file_path = os.path.join(os.path.dirname(__file__), "st.csv")
+    try:
+        df = pd.read_csv(file_path)
+        return df.to_string(index=False)
+    except Exception as e:
+        return f"Error reading CSV: {str(e)}"
+
+
+def create_chart(column: str, chart_type: str = "bar") -&gt; str:
+    """Create a chart for one CSV column and save it as a PNG file.
+    chart_type can be 'bar', 'hist' or 'line'."""
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), "st.csv"))
+    if column not in df.columns:
+        return f"Column not found. Available columns: {list(df.columns)}"
+    out = os.path.join(os.path.dirname(__file__), f"{column}_{chart_type}.png")
+    fig, ax = plt.subplots()
+    if chart_type == "hist":
+        df[column].plot.hist(ax=ax)
+    elif chart_type == "line":
+        df[column].plot.line(ax=ax)
+    else:
+        df[column].value_counts().plot.bar(ax=ax)
+    ax.set_title(f"{column} ({chart_type})")
+    fig.savefig(out)
+    plt.close(fig)
+    return f"Chart saved at {out}"
+
+
+csv_analyst = Agent(
+    name="csv_analyst",
+    model=LiteLlm(model="ollama_chat/gemma4:e4b", temperature=0),
+    description="Specialist agent for analyzing CSV data.",
+    instruction="""
+    You are a CSV Data Analyst.
+    ALWAYS use the read_csv tool before answering any question about the CSV.
+    Answer questions like averages, maximum, minimum, counts and comparisons.
+    Use only the information returned by the read_csv tool.
+    Do not invent information.
+    """,
+    tools=[read_csv],
+)
+
+csv_report_agent = Agent(
+    name="csv_report_agent",
+    model=LiteLlm(model="ollama_chat/gemma4:e4b", temperature=0),
+    description="Specialist agent for creating summaries and reports from CSV data.",
+    instruction="""
+    You are a CSV Report Specialist.
+    ALWAYS use the read_csv tool first.
+    Then:
+    1. Understand the columns.
+    2. Find useful statistics.
+    3. Write a short summary with key findings.
+    4. Use the create_chart tool to make one chart for an important column.
+    Use only information from the CSV. Do not invent information.
+    """,
+    tools=[read_csv, create_chart],
+)
+
+root_agent = Agent(
+    name="csv_orchestrator",
+    model=LiteLlm(model="ollama_chat/gemma4:e4b", temperature=0),
+    description="Main manager for CSV questions. Delegates to specialists.",
+    instruction="""
+    You are the CSV Orchestrator. You have two specialists:
+
+    1. csv_analyst: calculations, averages, max/min, counts, comparisons.
+    2. csv_report_agent: summaries, reports, key findings, charts.
+
+    Do NOT analyze the CSV yourself. Send the request to the right specialist.
+
+    Examples:
+    "What is the average age?"        -&gt; csv_analyst
+    "Who has the highest salary?"     -&gt; csv_analyst
+    "Give me a summary of the CSV."   -&gt; csv_report_agent
+    "Create a report with a chart."   -&gt; csv_report_agent
+    """,
+    sub_agents=[csv_analyst, csv_report_agent],
+)</code></pre>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="step-card" data-step="9" data-duration="2">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 10 of 11</div>
+            <h2 class="step-title">Step 8: Run and test the full system</h2>
+          </div>
+
+          <p>Start the web interface from <code>my_project/</code>:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>bash</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>adk web</code></pre>
+          </div>
+
+          <p>Try these questions in order:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Question</th>
+                  <th>Who should answer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>How many students are there?</td>
+                  <td><code>csv_analyst</code></td>
+                </tr>
+                <tr>
+                  <td>Which student has the highest salary?</td>
+                  <td><code>csv_analyst</code></td>
+                </tr>
+                <tr>
+                  <td>Give me a summary of the CSV with a chart</td>
+                  <td><code>csv_report_agent</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout tip">
+            <p>In the left panel of <code>adk web</code> you can open the <strong>Trace/Events</strong> tab to see which agent was called and which tool it used. This is the best part to show in a workshop.</p>
+          </div>
+        </section>
+
+        <section class="step-card" data-step="10" data-duration="1">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 11 of 11</div>
+            <h2 class="step-title">Troubleshooting &amp; Practice</h2>
+          </div>
+
+          <h3>Troubleshooting</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Problem</th>
+                  <th>Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Cannot connect to Ollama</td>
+                  <td>Check that Ollama is running: <code>ollama list</code></td>
+                </tr>
+                <tr>
+                  <td>Model not found</td>
+                  <td>Run <code>ollama pull gemma4:e4b</code> again</td>
+                </tr>
+                <tr>
+                  <td>Agent does not use the tool</td>
+                  <td>Keep <code>temperature=0</code> and keep "ALWAYS use the read_csv tool" in the instruction</td>
+                </tr>
+                <tr>
+                  <td>Wrong agent is picked</td>
+                  <td>Make the <code>description</code> of each sub-agent clearer</td>
+                </tr>
+                <tr>
+                  <td><code>csv_agent</code> not visible in <code>adk web</code></td>
+                  <td>Check <code>__init__.py</code> and run <code>adk web</code> from the parent folder</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Practice ideas</h3>
+          <ol>
+            <li>Add your own CSV with new columns and ask new questions.</li>
+            <li>Add a third agent that cleans missing values.</li>
+            <li>Change the model to a bigger Gemma and compare answers.</li>
+          </ol>
+
+          <h3>Learn more</h3>
+          <ul>
+            <li>ADK + Ollama: <a href="https://google.github.io/adk-docs/agents/models/ollama" target="_blank" rel="noopener noreferrer">https://google.github.io/adk-docs/agents/models/ollama</a></li>
+            <li>ADK + Gemma: <a href="https://adk.dev/agents/models/google-gemma" target="_blank" rel="noopener noreferrer">https://adk.dev/agents/models/google-gemma</a></li>
+            <li>Official Google codelab (Gemini + Gemma multi-agent on Cloud Run): <a href="https://codelabs.developers.google.com/next26/multi-agent-system" target="_blank" rel="noopener noreferrer">https://codelabs.developers.google.com/next26/multi-agent-system</a></li>
+          </ul>
+
+          <div class="author-card">
+            <div>
+              <div class="author-name">Created by Geeta Kakrani</div>
+              <div class="author-role">Google Developer Expert (AI/ML)</div>
+            </div>
+            <span class="brand-badge">Workshop Codelab</span>
+          </div>
+        </section>
+
+        <nav class="pager" aria-label="Step pagination">
+          <button class="btn btn-secondary" id="prevBtn" type="button" disabled>&#8592; Back</button>
+          <button class="btn btn-primary" id="nextBtn" type="button">Next &#8594;</button>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const cards = Array.from(document.querySelectorAll(".step-card"));
+    const navButtons = Array.from(document.querySelectorAll(".step-nav-btn"));
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const progressFill = document.getElementById("progressFill");
+    const timeText = document.getElementById("timeText");
+    const themeBtn = document.getElementById("themeBtn");
+    const viewModeBtn = document.getElementById("viewModeBtn");
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+
+    let currentStep = 0;
+
+    function updateStep(index, pushHash = true) {
+      currentStep = Math.max(0, Math.min(index, cards.length - 1));
+
+      cards.forEach((card, i) => {
+        card.classList.toggle("active", i === currentStep);
+      });
+
+      navButtons.forEach((btn, i) => {
+        btn.classList.toggle("active", i === currentStep);
+        btn.classList.toggle("completed", i < currentStep);
+      });
+
+      prevBtn.disabled = currentStep === 0;
+      nextBtn.textContent = currentStep === cards.length - 1 ? "Done" : "Next \u2192";
+
+      const percent = ((currentStep + 1) / cards.length) * 100;
+      progressFill.style.width = `${percent}%`;
+
+      let remaining = 0;
+      for (let i = currentStep; i < cards.length; i++) {
+        remaining += Number(cards[i].dataset.duration || 0);
+      }
+      timeText.textContent = `${remaining} min left`;
+
+      if (pushHash) {
+        history.replaceState(null, "", `#step-${currentStep + 1}`);
+      }
+
+      sidebar.classList.remove("open");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    navButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.body.classList.remove("all-steps-mode");
+        viewModeBtn.textContent = "All steps";
+        updateStep(Number(btn.dataset.step));
+      });
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (currentStep > 0) {
+        updateStep(currentStep - 1);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentStep < cards.length - 1) {
+        updateStep(currentStep + 1);
+      } else {
+        updateStep(0);
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (document.body.classList.contains("all-steps-mode")) return;
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      if (e.key === "ArrowRight" && currentStep < cards.length - 1) {
+        updateStep(currentStep + 1);
+      } else if (e.key === "ArrowLeft" && currentStep > 0) {
+        updateStep(currentStep - 1);
+      }
+    });
+
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const codeEl = btn.closest(".code-block").querySelector("code");
+        if (!codeEl) return;
+        try {
+          await navigator.clipboard.writeText(codeEl.textContent);
+          const original = btn.textContent;
+          btn.textContent = "Copied";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove("copied");
+          }, 1500);
+        } catch (_) {}
+      });
+    });
+
+    const savedTheme = localStorage.getItem("codelab-theme");
+    if (savedTheme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+      themeBtn.textContent = "Light";
+    }
+
+    themeBtn.addEventListener("click", () => {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem("codelab-theme", "light");
+        themeBtn.textContent = "Dark";
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("codelab-theme", "dark");
+        themeBtn.textContent = "Light";
+      }
+    });
+
+    viewModeBtn.addEventListener("click", () => {
+      const allMode = document.body.classList.toggle("all-steps-mode");
+      viewModeBtn.textContent = allMode ? "Step mode" : "All steps";
+    });
+
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+    });
+
+    const hashMatch = window.location.hash.match(/^#step-(\d+)$/);
+    if (hashMatch) {
+      const stepIndex = Number(hashMatch[1]) - 1;
+      updateStep(stepIndex, false);
+    } else {
+      updateStep(0, false);
+    }
+  </script>
+</body>
+</html>
