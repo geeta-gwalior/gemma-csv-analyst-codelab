@@ -8,19 +8,19 @@ Chatting with a local model is easy, but **Gemma 4** can do much more: it can ca
 **Time:** about 30 minutes  
 **Level:** Beginner  
 
-## Use case: What Gemma will do for you
+## What you will build
 
 ```
 You ask a question
         |
         v
-Gemma: csv_orchestrator (routes the task)
-   |                  |
-   v                  v
-Gemma: csv_analyst   Gemma: csv_report_agent
-(numbers & stats)    (summary + charts)
-   |                  |
-   +-- calls Python read_csv / create_chart --> st.csv
+csv_orchestrator  (the manager)
+   |            |
+   v            v
+csv_analyst   csv_report_agent
+(numbers)     (summary + charts)
+   |            |
+   +-- read_csv tool --> st.csv
 ```
 
 ## What you will learn
@@ -79,11 +79,17 @@ First, let's get **Gemma 4** running on your computer before writing any Python 
 ollama pull gemma4:e4b
 ```
 
+You can also open the Ollama app and select `gemma4:e4b` directly from the model dropdown:
+
+![Ollama desktop window with gemma4:e4b selected](imgs/Ollam_window.png)
+
 3. Verify that `gemma4:e4b` is ready on your machine:
 
 ```bash
 ollama list
 ```
+
+![Terminal output of ollama list showing gemma4:e4b](imgs/Ollama_lists.png)
 
 Once downloaded, `gemma4:e4b` runs locally at `http://localhost:11434` without needing an internet connection.
 
@@ -301,6 +307,8 @@ Ask Gemma these questions in order:
 | Give me a summary of the CSV with a chart | `csv_report_agent` |
 
 Open the **Trace/Events** tab in the left panel to watch how `gemma4:e4b` routes your request, calls `read_csv` and `create_chart`, and writes the final response — all running locally on your laptop.
+
+![Browser view showing csv_orchestrator graph and Gemma response](imgs/After%20Run.png)
 
 ## Troubleshooting
 

@@ -137,48 +137,48 @@
 
           <p>Chatting with a local model is easy, but <strong>Gemma 4</strong> can do much more: it can call Python functions (tools), inspect real data files, and generate charts. To demonstrate this use case, we will run <code>gemma4:e4b</code> locally with <strong>Ollama</strong> and use <strong>Google ADK</strong> as a simple Python wrapper to connect Gemma to your CSV file.</p>
 
-          <h3>Use case: What Gemma will do for you</h3>
+          <h3>What you will build</h3>
 
-          <div class="arch-diagram" aria-label="Gemma architecture diagram">
+          <div class="arch-diagram" aria-label="Agent architecture diagram">
             <div class="arch-node">
-              <div class="arch-node-title">You ask a question about st.csv</div>
+              <div class="arch-node-title">You ask a question</div>
             </div>
             <div class="arch-arrow">&#8595;</div>
             <div class="arch-node manager">
-              <div class="arch-node-title">Gemma 4 (csv_orchestrator)</div>
-              <div class="arch-node-sub">Reads your question &amp; picks the right role</div>
+              <div class="arch-node-title">csv_orchestrator</div>
+              <div class="arch-node-sub">The manager</div>
             </div>
             <div class="arch-arrow">&#8601; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#8600;</div>
             <div class="arch-row">
               <div class="arch-node specialist">
-                <div class="arch-node-title">Gemma 4 (csv_analyst)</div>
-                <div class="arch-node-sub">Calculates numbers, averages, min/max</div>
+                <div class="arch-node-title">csv_analyst</div>
+                <div class="arch-node-sub">Numbers</div>
               </div>
               <div class="arch-node specialist">
-                <div class="arch-node-title">Gemma 4 (csv_report_agent)</div>
-                <div class="arch-node-sub">Writes summaries &amp; saves PNG charts</div>
+                <div class="arch-node-title">csv_report_agent</div>
+                <div class="arch-node-sub">Summary + charts</div>
               </div>
             </div>
             <div class="arch-arrow">&#8595;</div>
             <div class="arch-node">
-              <div class="arch-node-title">Python tools (read_csv, create_chart) &#8594; st.csv</div>
+              <div class="arch-node-title">read_csv tool &#8594; st.csv</div>
             </div>
           </div>
 
           <div class="code-block">
             <div class="code-header">
-              <span>How Gemma handles your question</span>
+              <span>Architecture Flow</span>
             </div>
             <pre><code>You ask a question
         |
         v
-Gemma: csv_orchestrator (routes the task)
-   |                  |
-   v                  v
-Gemma: csv_analyst   Gemma: csv_report_agent
-(numbers &amp; stats)    (summary + charts)
-   |                  |
-   +-- calls Python read_csv / create_chart --&gt; st.csv</code></pre>
+csv_orchestrator  (the manager)
+   |            |
+   v            v
+csv_analyst   csv_report_agent
+(numbers)     (summary + charts)
+   |            |
+   +-- read_csv tool --&gt; st.csv</code></pre>
           </div>
 
           <h3>What you will learn</h3>
@@ -305,6 +305,12 @@ Gemma: csv_analyst   Gemma: csv_report_agent
             <pre><code>ollama pull gemma4:e4b</code></pre>
           </div>
 
+          <p>You can also open the Ollama app and select <code>gemma4:e4b</code> directly from the model dropdown:</p>
+          <figure class="step-figure">
+            <img src="imgs/Ollam_window.png" alt="Ollama app window with gemma4:e4b selected" loading="lazy">
+            <figcaption>Ollama desktop window with the local gemma4:e4b model selected.</figcaption>
+          </figure>
+
           <h3>3. Verify that Gemma is ready</h3>
           <p>Check that <code>gemma4:e4b</code> appears in your local model list:</p>
           <div class="code-block">
@@ -314,6 +320,11 @@ Gemma: csv_analyst   Gemma: csv_report_agent
             </div>
             <pre><code>ollama list</code></pre>
           </div>
+
+          <figure class="step-figure">
+            <img src="imgs/Ollama_lists.png" alt="Terminal output of ollama list showing gemma4:e4b installed" loading="lazy">
+            <figcaption>Running ollama list in the terminal to verify gemma4:e4b is downloaded on your laptop.</figcaption>
+          </figure>
 
           <div class="callout tip">
             <p><strong>Gemma is now on your machine!</strong> Once downloaded, <code>gemma4:e4b</code> runs locally at <code>http://localhost:11434</code> without needing an internet connection.</p>
@@ -748,6 +759,11 @@ root_agent = Agent(
           <div class="callout tip">
             <p>Open the <strong>Trace/Events</strong> tab in the left panel to watch how <code>gemma4:e4b</code> routes your request, calls <code>read_csv</code> and <code>create_chart</code>, and writes the final response — all running locally on your laptop.</p>
           </div>
+
+          <figure class="step-figure">
+            <img src="imgs/After%20Run.png" alt="Browser view showing csv_orchestrator graph and Gemma response in Events and Traces" loading="lazy">
+            <figcaption>Running the system in the browser: the left panel shows the agent graph (csv_orchestrator, csv_analyst, csv_report_agent, read_csv) and the right panel shows Gemma's reasoning and response.</figcaption>
+          </figure>
         </section>
 
         <section class="step-card" data-step="10" data-duration="1">

@@ -707,6 +707,29 @@ tr:last-child td {
   color: var(--text-secondary);
 }
 
+.step-figure {
+  margin: 18px 0 24px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--bg-subtle);
+  box-shadow: var(--shadow-sm);
+}
+
+.step-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.step-figure figcaption {
+  padding: 10px 14px;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+}
+
 @media (max-width: 900px) {
   .menu-btn {
     display: inline-flex;
