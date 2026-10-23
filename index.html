@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Build a CSV Analyst with Google ADK and Gemma (Local, Free)</title>
-  <meta name="description" content="Hands-on codelab: Build a local, free multi-agent CSV analyst using Google ADK, Gemma 4, and Ollama.">
+  <title>Hands-on with Google Gemma: Build a Local CSV Analyst (Free, Private)</title>
+  <meta name="description" content="Hands-on Google Gemma workshop codelab: Run Gemma 4 locally on your laptop with Ollama and build a private CSV data analyst.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,9 +20,9 @@
       </button>
       <span class="brand-badge">
         <span class="brand-dot"></span>
-        Codelab
+        Gemma Workshop
       </span>
-      <h1 class="topbar-title">Build a CSV Analyst with Google ADK and Gemma (Local, Free)</h1>
+      <h1 class="topbar-title">Hands-on with Google Gemma: Build a Local CSV Analyst</h1>
     </div>
     <div class="topbar-right">
       <div class="time-pill" id="timeRemaining">
@@ -53,61 +53,61 @@
         <li>
           <button class="step-nav-btn" data-step="1" type="button">
             <span class="step-num">2</span>
-            <span class="step-label">What is Gemma &amp; Basics</span>
+            <span class="step-label">Meet Google Gemma</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="2" type="button">
             <span class="step-num">3</span>
-            <span class="step-label">Install the requirements</span>
+            <span class="step-label">Run Gemma Locally</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="3" type="button">
             <span class="step-num">4</span>
-            <span class="step-label">Create the project folder</span>
+            <span class="step-label">Set Up the Use Case</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="4" type="button">
             <span class="step-num">5</span>
-            <span class="step-label">Write the tool</span>
+            <span class="step-label">Give Gemma a CSV Tool</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="5" type="button">
             <span class="step-num">6</span>
-            <span class="step-label">Create the first agent</span>
+            <span class="step-label">Gemma as a Data Analyst</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="6" type="button">
             <span class="step-num">7</span>
-            <span class="step-label">Test one agent quickly</span>
+            <span class="step-label">Test Gemma in the Browser</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="7" type="button">
             <span class="step-num">8</span>
-            <span class="step-label">Chart tool &amp; report agent</span>
+            <span class="step-label">Gemma for Reports &amp; Charts</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="8" type="button">
             <span class="step-num">9</span>
-            <span class="step-label">Create the manager agent</span>
+            <span class="step-label">Gemma as the Router</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="9" type="button">
             <span class="step-num">10</span>
-            <span class="step-label">Run and test the system</span>
+            <span class="step-label">Run the Full Gemma System</span>
           </button>
         </li>
         <li>
           <button class="step-nav-btn" data-step="10" type="button">
             <span class="step-num">11</span>
-            <span class="step-label">Troubleshooting &amp; Practice</span>
+            <span class="step-label">Troubleshooting &amp; Ideas</span>
           </button>
         </li>
       </ol>
@@ -124,79 +124,83 @@
         <section class="step-card active" data-step="0" data-duration="3">
           <div class="step-header">
             <div class="step-eyebrow">Part 1 of 11</div>
-            <h2 class="step-title">Overview</h2>
+            <h2 class="step-title">Hands-on with Google Gemma: Local CSV Analyst</h2>
             <div class="meta-strip">
+              <span class="meta-chip"><strong>Model:</strong> Gemma 4 (gemma4:e4b)</span>
               <span class="meta-chip"><strong>Time:</strong> about 30 minutes</span>
               <span class="meta-chip"><strong>Level:</strong> Beginner</span>
-              <span class="meta-chip"><strong>Cost:</strong> Local &amp; Free</span>
+              <span class="meta-chip"><strong>Cost:</strong> 100% Local &amp; Free</span>
             </div>
           </div>
 
-          <p>In this codelab you will build a small team of AI agents that read a CSV file and answer questions about it. Everything runs on your own laptop. No cloud, no API key, no cost.</p>
+          <p>In this workshop you will download and run <strong>Google Gemma</strong> directly on your own laptop, and use it to build a private CSV Data Analyst. Everything runs on your machine — no cloud, no API key, and no cost.</p>
 
-          <h3>What you will build</h3>
+          <p>Chatting with a local model is easy, but <strong>Gemma 4</strong> can do much more: it can call Python functions (tools), inspect real data files, and generate charts. To demonstrate this use case, we will run <code>gemma4:e4b</code> locally with <strong>Ollama</strong> and use <strong>Google ADK</strong> as a simple Python wrapper to connect Gemma to your CSV file.</p>
 
-          <div class="arch-diagram" aria-label="Agent architecture diagram">
+          <h3>Use case: What Gemma will do for you</h3>
+
+          <div class="arch-diagram" aria-label="Gemma architecture diagram">
             <div class="arch-node">
-              <div class="arch-node-title">You ask a question</div>
+              <div class="arch-node-title">You ask a question about st.csv</div>
             </div>
             <div class="arch-arrow">&#8595;</div>
             <div class="arch-node manager">
-              <div class="arch-node-title">csv_orchestrator</div>
-              <div class="arch-node-sub">The manager</div>
+              <div class="arch-node-title">Gemma 4 (csv_orchestrator)</div>
+              <div class="arch-node-sub">Reads your question &amp; picks the right role</div>
             </div>
             <div class="arch-arrow">&#8601; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#8600;</div>
             <div class="arch-row">
               <div class="arch-node specialist">
-                <div class="arch-node-title">csv_analyst</div>
-                <div class="arch-node-sub">Numbers</div>
+                <div class="arch-node-title">Gemma 4 (csv_analyst)</div>
+                <div class="arch-node-sub">Calculates numbers, averages, min/max</div>
               </div>
               <div class="arch-node specialist">
-                <div class="arch-node-title">csv_report_agent</div>
-                <div class="arch-node-sub">Summary + charts</div>
+                <div class="arch-node-title">Gemma 4 (csv_report_agent)</div>
+                <div class="arch-node-sub">Writes summaries &amp; saves PNG charts</div>
               </div>
             </div>
             <div class="arch-arrow">&#8595;</div>
             <div class="arch-node">
-              <div class="arch-node-title">read_csv tool &#8594; st.csv</div>
+              <div class="arch-node-title">Python tools (read_csv, create_chart) &#8594; st.csv</div>
             </div>
           </div>
 
           <div class="code-block">
             <div class="code-header">
-              <span>Architecture Flow</span>
+              <span>How Gemma handles your question</span>
             </div>
             <pre><code>You ask a question
         |
         v
-csv_orchestrator  (the manager)
-   |            |
-   v            v
-csv_analyst   csv_report_agent
-(numbers)     (summary + charts)
-   |            |
-   +-- read_csv tool --&gt; st.csv</code></pre>
+Gemma: csv_orchestrator (routes the task)
+   |                  |
+   v                  v
+Gemma: csv_analyst   Gemma: csv_report_agent
+(numbers &amp; stats)    (summary + charts)
+   |                  |
+   +-- calls Python read_csv / create_chart --&gt; st.csv</code></pre>
           </div>
 
           <h3>What you will learn</h3>
           <ul>
-            <li>What an <strong>agent</strong>, a <strong>tool</strong> and a <strong>sub-agent</strong> are</li>
-            <li>How to run <strong>Gemma</strong> locally with <strong>Ollama</strong></li>
-            <li>How to connect Gemma to <strong>Google ADK</strong> using <code>LiteLlm</code></li>
-            <li>How one manager agent can send work to specialist agents</li>
+            <li>What <strong>Google Gemma</strong> is and why open local models matter</li>
+            <li>How to download and run <strong>Gemma 4 (<code>gemma4:e4b</code>)</strong> on your laptop with <strong>Ollama</strong></li>
+            <li>How <strong>Gemma's tool calling</strong> lets a local model read files and create charts</li>
+            <li>How to get reliable answers from a compact local model using focused roles and <code>temperature=0</code></li>
           </ul>
         </section>
 
         <section class="step-card" data-step="1" data-duration="4">
           <div class="step-header">
             <div class="step-eyebrow">Part 2 of 11</div>
-            <h2 class="step-title">What is Gemma &amp; Basics</h2>
+            <h2 class="step-title">Meet Google Gemma</h2>
           </div>
 
-          <p><strong>Gemma</strong> is a family of open AI models from Google DeepMind. It is built using the same research as Google's Gemini models, but you can download Gemma and run it yourself.</p>
-          <p>Gemma comes in different sizes. Small ones (like <code>gemma4:e4b</code> used here) run on a normal laptop. Bigger ones need a stronger GPU or the cloud.</p>
+          <p><strong>Gemma</strong> is a family of lightweight, open AI models from Google DeepMind. It is built from the same research and technology used to create Google's Gemini models, but with open weights so you can download it and run it on your own hardware.</p>
 
-          <h3>Why is Gemma useful?</h3>
+          <p>Gemma comes in different sizes. Compact sizes like <strong><code>gemma4:e4b</code></strong> (used in this workshop) run smoothly on a normal laptop. Larger sizes can run on a workstation GPU or Google Cloud.</p>
+
+          <h3>Why use Gemma?</h3>
           <div class="table-wrap">
             <table>
               <thead>
@@ -208,23 +212,23 @@ csv_analyst   csv_report_agent
               <tbody>
                 <tr>
                   <td><strong>Free to run</strong></td>
-                  <td>No API bill. Download once and use it.</td>
+                  <td>No API key and no bill. Download the model once and use it as much as you want.</td>
                 </tr>
                 <tr>
-                  <td><strong>Private</strong></td>
-                  <td>Your data stays on your machine. Good for company or student data.</td>
+                  <td><strong>100% Private</strong></td>
+                  <td>Your CSV files and sensitive company or student data never leave your laptop.</td>
                 </tr>
                 <tr>
                   <td><strong>Works offline</strong></td>
-                  <td>No internet needed after the download.</td>
+                  <td>No internet connection needed after you download the model.</td>
                 </tr>
                 <tr>
                   <td><strong>Tool calling</strong></td>
-                  <td>Gemma can call your Python functions, which is what agents need.</td>
+                  <td>Gemma 4 can trigger your Python functions to read files, run calculations, or plot charts.</td>
                 </tr>
                 <tr>
                   <td><strong>Flexible</strong></td>
-                  <td>Run it locally with Ollama, or deploy it on Google Cloud when you need scale.</td>
+                  <td>Start locally on your laptop with Ollama, and deploy the exact same model to Google Cloud when you need scale.</td>
                 </tr>
               </tbody>
             </table>
@@ -232,16 +236,16 @@ csv_analyst   csv_report_agent
 
           <h3>Gemma or Gemini?</h3>
           <ul>
-            <li><strong>Gemini</strong>: Google's most powerful models, used through an API in the cloud.</li>
-            <li><strong>Gemma</strong>: smaller open models that you can run and control yourself.</li>
+            <li><strong>Gemma</strong>: Open models you download, control, and run locally on your own machine for free.</li>
+            <li><strong>Gemini</strong>: Google's largest frontier models, accessed through a cloud API.</li>
           </ul>
-          <p>In this codelab we use Gemma because it is free, private and easy to run in a workshop.</p>
+          <p>In this workshop we use <strong>Gemma</strong> because it gives you full privacy, zero cost, and hands-on control right on your laptop.</p>
 
           <div class="callout note">
-            <p><strong>Note:</strong> a small local model is less powerful than a big cloud model. That is why we keep instructions short and clear, and use <code>temperature=0</code>.</p>
+            <p><strong>Tip for local models:</strong> A compact laptop model has fewer parameters than a giant cloud model. To get the best results from local Gemma, keep instructions short and direct, set <code>temperature=0</code>, and split big jobs into focused tasks.</p>
           </div>
 
-          <h3>Basics in 1 minute</h3>
+          <h3>Key words in 1 minute</h3>
           <div class="table-wrap">
             <table>
               <thead>
@@ -252,28 +256,28 @@ csv_analyst   csv_report_agent
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>LLM</strong></td>
-                  <td>The "brain" that understands and writes text. Here it is Gemma.</td>
-                </tr>
-                <tr>
-                  <td><strong>Agent</strong></td>
-                  <td>An LLM with a job (instructions) and, optionally, tools.</td>
-                </tr>
-                <tr>
-                  <td><strong>Tool</strong></td>
-                  <td>A normal Python function the agent can call. Example: read a file.</td>
-                </tr>
-                <tr>
-                  <td><strong>Sub-agent</strong></td>
-                  <td>A specialist agent that a manager agent can hand work to.</td>
-                </tr>
-                <tr>
-                  <td><strong>ADK</strong></td>
-                  <td>Agent Development Kit. Google's Python framework to build agents.</td>
+                  <td><strong>Gemma (LLM)</strong></td>
+                  <td>The AI "brain" running on your laptop that understands text and decides which tool to call.</td>
                 </tr>
                 <tr>
                   <td><strong>Ollama</strong></td>
-                  <td>A free app that runs open models like Gemma on your computer.</td>
+                  <td>A free tool that downloads and runs open models like Gemma on your computer.</td>
+                </tr>
+                <tr>
+                  <td><strong>Tool</strong></td>
+                  <td>A normal Python function that Gemma can call (for example, to read a CSV file).</td>
+                </tr>
+                <tr>
+                  <td><strong>Agent</strong></td>
+                  <td>Gemma paired with clear instructions and a list of Python tools it can use.</td>
+                </tr>
+                <tr>
+                  <td><strong>Sub-agent</strong></td>
+                  <td>A focused Gemma setup (like number calculation vs. report writing) so the local model stays accurate.</td>
+                </tr>
+                <tr>
+                  <td><strong>ADK</strong></td>
+                  <td>Google's Agent Development Kit — the Python library we use in this use case to connect Gemma to tools and a web UI.</td>
                 </tr>
               </tbody>
             </table>
@@ -283,15 +287,16 @@ csv_analyst   csv_report_agent
         <section class="step-card" data-step="2" data-duration="5">
           <div class="step-header">
             <div class="step-eyebrow">Part 3 of 11</div>
-            <h2 class="step-title">Step 1: Install the requirements</h2>
+            <h2 class="step-title">Step 1: Run Gemma Locally with Ollama</h2>
           </div>
 
-          <p>You need Python 3.10 or higher.</p>
+          <p>First, let's get <strong>Gemma 4</strong> running on your computer before writing any Python code.</p>
 
           <h3>1. Install Ollama</h3>
           <p>Download and install Ollama from <a href="https://ollama.com" target="_blank" rel="noopener noreferrer">https://ollama.com</a>.</p>
 
-          <h3>2. Download the Gemma model</h3>
+          <h3>2. Download the Gemma 4 model</h3>
+          <p>Open your terminal and pull <code>gemma4:e4b</code>:</p>
           <div class="code-block">
             <div class="code-header">
               <span>bash</span>
@@ -300,7 +305,30 @@ csv_analyst   csv_report_agent
             <pre><code>ollama pull gemma4:e4b</code></pre>
           </div>
 
-          <h3>3. Install the Python packages</h3>
+          <h3>3. Verify that Gemma is ready</h3>
+          <p>Check that <code>gemma4:e4b</code> appears in your local model list:</p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>bash</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code>ollama list</code></pre>
+          </div>
+
+          <div class="callout tip">
+            <p><strong>Gemma is now on your machine!</strong> Once downloaded, <code>gemma4:e4b</code> runs locally at <code>http://localhost:11434</code> without needing an internet connection.</p>
+          </div>
+        </section>
+
+        <section class="step-card" data-step="3" data-duration="3">
+          <div class="step-header">
+            <div class="step-eyebrow">Part 4 of 11</div>
+            <h2 class="step-title">Step 2: Set Up the CSV Use Case</h2>
+          </div>
+
+          <p>Now let's set up the Python project that connects your local Gemma model to a CSV file. Make sure you have <strong>Python 3.10 or higher</strong>.</p>
+
+          <h3>1. Install the Python libraries</h3>
           <div class="code-block">
             <div class="code-header">
               <span>bash</span>
@@ -308,20 +336,9 @@ csv_analyst   csv_report_agent
             </div>
             <pre><code>pip install "google-adk[extensions]" pandas matplotlib</code></pre>
           </div>
+          <p><code>[extensions]</code> includes <code>LiteLLM</code>, which lets Python talk directly to your local Ollama Gemma server.</p>
 
-          <div class="callout">
-            <p><code>[extensions]</code> is needed because ADK talks to Ollama through LiteLLM.</p>
-          </div>
-        </section>
-
-        <section class="step-card" data-step="3" data-duration="3">
-          <div class="step-header">
-            <div class="step-eyebrow">Part 4 of 11</div>
-            <h2 class="step-title">Step 2: Create the project folder</h2>
-          </div>
-
-          <p>Create this folder structure on your computer:</p>
-
+          <h3>2. Create the project folder</h3>
           <div class="folder-tree">
             my_project/<br>
             &nbsp;&nbsp;csv_agent/<br>
@@ -332,7 +349,7 @@ csv_analyst   csv_report_agent
           </div>
 
           <h3><code>__init__.py</code></h3>
-          <p>One line, so ADK can find your agent:</p>
+          <p>One line to load your agent file:</p>
           <div class="code-block">
             <div class="code-header">
               <span>csv_agent/__init__.py</span>
@@ -342,7 +359,7 @@ csv_analyst   csv_report_agent
           </div>
 
           <h3><code>.env</code></h3>
-          <p>Tells ADK where Ollama is running:</p>
+          <p>Points to your local Ollama server where Gemma is running:</p>
           <div class="code-block">
             <div class="code-header">
               <span>csv_agent/.env</span>
@@ -352,7 +369,7 @@ csv_analyst   csv_report_agent
           </div>
 
           <h3><code>st.csv</code></h3>
-          <p>Sample data (you can also use your own):</p>
+          <p>Sample data for Gemma to analyze (you can also replace this with your own CSV):</p>
           <div class="code-block">
             <div class="code-header">
               <span>csv_agent/st.csv</span>
@@ -370,11 +387,12 @@ Sana,23,Pune,42000</code></pre>
         <section class="step-card" data-step="4" data-duration="3">
           <div class="step-header">
             <div class="step-eyebrow">Part 5 of 11</div>
-            <h2 class="step-title">Step 3: Write the tool</h2>
+            <h2 class="step-title">Step 3: Give Gemma a Tool to Read the CSV</h2>
           </div>
 
-          <p>A tool is just a Python function. The <strong>docstring is important</strong>: the model reads it to know what the tool does.</p>
-          <p>Open <code>agent.py</code> and start with this:</p>
+          <p>By itself, an AI model only sees the text you send it — it cannot open files on your disk. However, <strong>Gemma 4 supports tool calling</strong>: if you give it a Python function, Gemma reads the function's <strong>docstring</strong> to understand what the function does and calls it automatically when needed.</p>
+
+          <p>Open <code>agent.py</code> and write the <code>read_csv</code> tool:</p>
 
           <div class="code-block">
             <div class="code-header">
@@ -399,17 +417,18 @@ def read_csv() -&gt; str:
           </div>
 
           <div class="callout tip">
-            <p><strong>Why:</strong> the model cannot open files by itself. The tool gives it the data.</p>
+            <p><strong>How Gemma uses this:</strong> Always write a clear docstring (`"""Read the st.csv file..."""`). Gemma reads that sentence to decide when to call <code>read_csv()</code>.</p>
           </div>
         </section>
 
         <section class="step-card" data-step="5" data-duration="3">
           <div class="step-header">
             <div class="step-eyebrow">Part 6 of 11</div>
-            <h2 class="step-title">Step 4: Create the first agent (the analyst)</h2>
+            <h2 class="step-title">Step 4: Configure Gemma as a Data Analyst</h2>
           </div>
 
-          <p>Add the first specialist agent to <code>agent.py</code>:</p>
+          <p>Now let's connect <code>gemma4:e4b</code> to the <code>read_csv</code> tool and give it clear instructions for answering number questions.</p>
+          <p>Add this to <code>agent.py</code>:</p>
 
           <div class="code-block">
             <div class="code-header">
@@ -431,20 +450,20 @@ def read_csv() -&gt; str:
 )</code></pre>
           </div>
 
-          <h3>Two things to notice</h3>
+          <h3>Two important settings for local Gemma</h3>
           <ul>
-            <li><strong><code>ollama_chat/...</code></strong> : always use <code>ollama_chat</code>, not <code>ollama</code>. The plain <code>ollama</code> prefix can cause tool-call loops.</li>
-            <li><strong><code>temperature=0</code></strong> : makes answers steady and less random, which is good for numbers.</li>
+            <li><strong><code>ollama_chat/gemma4:e4b</code></strong> : Always use the <code>ollama_chat/</code> prefix (not plain <code>ollama/</code>). This uses Gemma's structured chat template so tool calls work cleanly without loops.</li>
+            <li><strong><code>temperature=0</code></strong> : Keeps Gemma's output steady and factual, which is essential when working with numbers and CSV rows.</li>
           </ul>
         </section>
 
         <section class="step-card" data-step="6" data-duration="2">
           <div class="step-header">
             <div class="step-eyebrow">Part 7 of 11</div>
-            <h2 class="step-title">Step 5: Test one agent quickly (optional)</h2>
+            <h2 class="step-title">Step 5: Test Gemma in the Browser (Optional)</h2>
           </div>
 
-          <p>Testing one agent first is optional, but recommended so you know your local setup works.</p>
+          <p>Before adding charts and a second role, let's quickly see <code>gemma4:e4b</code> read the CSV and answer a question.</p>
           <p>Temporarily add this line at the bottom of <code>agent.py</code>:</p>
 
           <div class="code-block">
@@ -465,22 +484,22 @@ def read_csv() -&gt; str:
             <pre><code>adk web</code></pre>
           </div>
 
-          <p>Open <a href="http://localhost:8000" target="_blank" rel="noopener noreferrer">http://localhost:8000</a>, pick <code>csv_agent</code>, and ask:</p>
+          <p>Open <a href="http://localhost:8000" target="_blank" rel="noopener noreferrer">http://localhost:8000</a>, pick <code>csv_agent</code>, and ask Gemma:</p>
 
           <div class="callout">
             <p>What is the average age?</p>
           </div>
 
-          <p>If you get the right answer, your setup works. <strong>Remove the temporary line</strong> before moving to the next step.</p>
+          <p>You will see Gemma call <code>read_csv</code>, inspect the 5 rows, and calculate the exact average age. <strong>Remove the temporary <code>root_agent = csv_analyst</code> line</strong> before moving to the next step.</p>
         </section>
 
         <section class="step-card" data-step="7" data-duration="4">
           <div class="step-header">
             <div class="step-eyebrow">Part 8 of 11</div>
-            <h2 class="step-title">Step 6: Add the chart tool and the report agent</h2>
+            <h2 class="step-title">Step 6: Let Gemma Create Charts &amp; Reports</h2>
           </div>
 
-          <p>First, add the chart tool. Put this near <code>read_csv</code> in <code>agent.py</code>:</p>
+          <p>Gemma can also pass arguments to a Python function — for example, choosing which column to plot and what chart type to use. Let's add a <code>create_chart</code> function near <code>read_csv</code> in <code>agent.py</code>:</p>
 
           <div class="code-block">
             <div class="code-header">
@@ -512,7 +531,7 @@ def create_chart(column: str, chart_type: str = "bar") -&gt; str:
     return f"Chart saved at {out}"</code></pre>
           </div>
 
-          <p>Now add the report agent:</p>
+          <p>Now configure a second Gemma role focused on writing summaries and generating charts:</p>
 
           <div class="code-block">
             <div class="code-header">
@@ -538,17 +557,17 @@ def create_chart(column: str, chart_type: str = "bar") -&gt; str:
           </div>
 
           <div class="callout tip">
-            <p><strong>Why two agents?</strong> Small, focused agents are more reliable than one agent that does everything.</p>
+            <p><strong>Why split work across two Gemma roles?</strong> Compact local models like <code>gemma4:e4b</code> perform much better when each prompt has a single, clear job instead of one long instruction trying to do everything at once.</p>
           </div>
         </section>
 
         <section class="step-card" data-step="8" data-duration="3">
           <div class="step-header">
             <div class="step-eyebrow">Part 9 of 11</div>
-            <h2 class="step-title">Step 7: Create the manager (root agent)</h2>
+            <h2 class="step-title">Step 7: Use Gemma to Route Questions</h2>
           </div>
 
-          <p>ADK looks for a variable named <strong><code>root_agent</code></strong>. This is the entry point.</p>
+          <p>Finally, we use <code>gemma4:e4b</code> as the main entry point (<code>root_agent</code>) that reads the user's question and routes it to either the analyst role or the report role.</p>
 
           <div class="code-block">
             <div class="code-header">
@@ -577,7 +596,7 @@ def create_chart(column: str, chart_type: str = "bar") -&gt; str:
 )</code></pre>
           </div>
 
-          <p><strong>How it works:</strong> the manager reads your question and transfers it to the best sub-agent. That sub-agent answers you directly.</p>
+          <p><strong>Why few-shot examples matter for Gemma:</strong> Including the 4 short examples in the instruction helps a compact model like <code>gemma4:e4b</code> route questions with high accuracy.</p>
 
           <details class="details-box">
             <summary>View complete agent.py file</summary>
@@ -686,10 +705,10 @@ root_agent = Agent(
         <section class="step-card" data-step="9" data-duration="2">
           <div class="step-header">
             <div class="step-eyebrow">Part 10 of 11</div>
-            <h2 class="step-title">Step 8: Run and test the full system</h2>
+            <h2 class="step-title">Step 8: Run and Test the Full Gemma System</h2>
           </div>
 
-          <p>Start the web interface from <code>my_project/</code>:</p>
+          <p>Start the web UI from <code>my_project/</code>:</p>
 
           <div class="code-block">
             <div class="code-header">
@@ -699,14 +718,14 @@ root_agent = Agent(
             <pre><code>adk web</code></pre>
           </div>
 
-          <p>Try these questions in order:</p>
+          <p>Ask Gemma these questions in order:</p>
 
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>Question</th>
-                  <th>Who should answer</th>
+                  <th>Question you ask</th>
+                  <th>Which Gemma role answers</th>
                 </tr>
               </thead>
               <tbody>
@@ -727,14 +746,14 @@ root_agent = Agent(
           </div>
 
           <div class="callout tip">
-            <p>In the left panel of <code>adk web</code> you can open the <strong>Trace/Events</strong> tab to see which agent was called and which tool it used. This is the best part to show in a workshop.</p>
+            <p>Open the <strong>Trace/Events</strong> tab in the left panel to watch how <code>gemma4:e4b</code> routes your request, calls <code>read_csv</code> and <code>create_chart</code>, and writes the final response — all running locally on your laptop.</p>
           </div>
         </section>
 
         <section class="step-card" data-step="10" data-duration="1">
           <div class="step-header">
             <div class="step-eyebrow">Part 11 of 11</div>
-            <h2 class="step-title">Troubleshooting &amp; Practice</h2>
+            <h2 class="step-title">Troubleshooting &amp; Next Steps with Gemma</h2>
           </div>
 
           <h3>Troubleshooting</h3>
@@ -752,37 +771,38 @@ root_agent = Agent(
                   <td>Check that Ollama is running: <code>ollama list</code></td>
                 </tr>
                 <tr>
-                  <td>Model not found</td>
+                  <td>Gemma model not found</td>
                   <td>Run <code>ollama pull gemma4:e4b</code> again</td>
                 </tr>
                 <tr>
-                  <td>Agent does not use the tool</td>
+                  <td>Gemma answers without calling the tool</td>
                   <td>Keep <code>temperature=0</code> and keep "ALWAYS use the read_csv tool" in the instruction</td>
                 </tr>
                 <tr>
-                  <td>Wrong agent is picked</td>
-                  <td>Make the <code>description</code> of each sub-agent clearer</td>
+                  <td>Wrong specialist is picked</td>
+                  <td>Make the <code>description</code> of each role clearer</td>
                 </tr>
                 <tr>
-                  <td><code>csv_agent</code> not visible in <code>adk web</code></td>
+                  <td><code>csv_agent</code> not visible in the UI</td>
                   <td>Check <code>__init__.py</code> and run <code>adk web</code> from the parent folder</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <h3>Practice ideas</h3>
+          <h3>Ideas to try next with Gemma</h3>
           <ol>
-            <li>Add your own CSV with new columns and ask new questions.</li>
-            <li>Add a third agent that cleans missing values.</li>
-            <li>Change the model to a bigger Gemma and compare answers.</li>
+            <li><strong>Try a bigger or smaller Gemma model:</strong> Pull another Gemma size in Ollama, change the model name in <code>LiteLlm</code>, and compare speed and answers on your laptop.</li>
+            <li><strong>Bring your own CSV:</strong> Replace <code>st.csv</code> with your own dataset and test what questions <code>gemma4:e4b</code> can answer.</li>
+            <li><strong>Add a data-cleaning role:</strong> Create a third Gemma role that checks for missing values in the CSV.</li>
           </ol>
 
           <h3>Learn more</h3>
           <ul>
-            <li>ADK + Ollama: <a href="https://google.github.io/adk-docs/agents/models/ollama" target="_blank" rel="noopener noreferrer">https://google.github.io/adk-docs/agents/models/ollama</a></li>
-            <li>ADK + Gemma: <a href="https://adk.dev/agents/models/google-gemma" target="_blank" rel="noopener noreferrer">https://adk.dev/agents/models/google-gemma</a></li>
-            <li>Official Google codelab (Gemini + Gemma multi-agent on Cloud Run): <a href="https://codelabs.developers.google.com/next26/multi-agent-system" target="_blank" rel="noopener noreferrer">https://codelabs.developers.google.com/next26/multi-agent-system</a></li>
+            <li>Google Gemma models on Ollama: <a href="https://ollama.com/library/gemma4" target="_blank" rel="noopener noreferrer">https://ollama.com/library/gemma4</a></li>
+            <li>Using Gemma with ADK: <a href="https://adk.dev/agents/models/google-gemma" target="_blank" rel="noopener noreferrer">https://adk.dev/agents/models/google-gemma</a></li>
+            <li>Using Ollama with ADK: <a href="https://google.github.io/adk-docs/agents/models/ollama" target="_blank" rel="noopener noreferrer">https://google.github.io/adk-docs/agents/models/ollama</a></li>
+            <li>Official Google codelab (Gemini + Gemma on Cloud Run): <a href="https://codelabs.developers.google.com/next26/multi-agent-system" target="_blank" rel="noopener noreferrer">https://codelabs.developers.google.com/next26/multi-agent-system</a></li>
           </ul>
 
           <div class="author-card">
@@ -790,7 +810,7 @@ root_agent = Agent(
               <div class="author-name">Created by Geeta Kakrani</div>
               <div class="author-role">Google Developer Expert (AI/ML)</div>
             </div>
-            <span class="brand-badge">Workshop Codelab</span>
+            <span class="brand-badge">Google Gemma Workshop</span>
           </div>
         </section>
 
